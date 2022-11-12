@@ -17,6 +17,11 @@ function changePrice(classNames, conversionRate) {
                 continue;
             }
 
+            var regexRule = new RegExp(/^[0-9]+,[0-9]{2} TL$/);
+            if (!regexRule.test(priceHTML)) {
+                return;
+            }
+
             // Change dec "," to "." 
             priceHTML = priceHTML.replace(".", "");
             priceHTML = priceHTML.replace(",", ".");
