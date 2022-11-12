@@ -7,19 +7,20 @@ function changePrice(classNames, conversionRate) {
     classNames.forEach(element => {
         // get all elements by class name
         var prices = document.getElementsByClassName(element);
-
+        console.log(element + " - " + prices.length)
         // for every price with this class name
         for (var i = 0; i < prices.length; i++) {
             var priceHTML = prices[i].innerHTML;
 
-            // Skip free games
-            if (priceHTML == "Free") {
-                continue;
-            }
+            // Format properly
+            priceHTML = priceHTML.replaceAll("\n", "");
+            priceHTML = priceHTML.replaceAll("\t", "");
+            priceHTML = priceHTML.replaceAll("<div class=\"your_price_label\">Your Price:</div><div>", "");
+            priceHTML = priceHTML.replaceAll("</div>", "");
 
             var regexRule = new RegExp(/^[0-9]+,[0-9]{2} TL$/);
             if (!regexRule.test(priceHTML)) {
-                return;
+                continue;
             }
 
             // Change dec "," to "." 
@@ -54,7 +55,7 @@ function changeBalance(conversionRate) {
 
 
 // All the classNames for the divs that contain prices we want to change
-var classNames = ["game_purchase_price price", "discount_final_price", "discount_final_price your_price",
+var classNames = ["game_purchase_price price", "discount_final_price your_price", "discount_final_price",
     "discount_original_price", "game_area_dlc_price"];
 
 // API Call and change for every price in doc
@@ -63,8 +64,13 @@ fetch("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/
         return response.json();
     })
     .then(value => {
+
+        
         // Convert balance (at the top)
         changeBalance(value.eur);
         // Convert prices of above defined class names
         changePrice(classNames, value.eur);
     });
+
+
+
