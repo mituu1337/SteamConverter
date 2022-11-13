@@ -12,7 +12,8 @@
           "js": ["scripts/steamConverter.js"],
           "matches": [
             "https://store.steampowered.com/*"
-          ]
+          ],
+          "run_at": "document_end"
         }
       ]
 }

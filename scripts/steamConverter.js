@@ -7,25 +7,23 @@ function changePrice(classNames, conversionRate) {
     classNames.forEach(element => {
         // get all elements by class name
         var prices = document.getElementsByClassName(element);
-        console.log(element + " - " + prices.length)
+        
         // for every price with this class name
         for (var i = 0; i < prices.length; i++) {
             var priceHTML = prices[i].innerHTML;
 
             // Format properly
-            priceHTML = priceHTML.replaceAll("\n", "");
-            priceHTML = priceHTML.replaceAll("\t", "");
-            priceHTML = priceHTML.replaceAll("<div class=\"your_price_label\">Your Price:</div><div>", "");
-            priceHTML = priceHTML.replaceAll("</div>", "");
+            priceHTML = priceHTML.replaceAll("\n", ""); // Remove newLines
+            priceHTML = priceHTML.replaceAll("\t", ""); // Remove Tabs
+            priceHTML = priceHTML.replaceAll("<div class=\"your_price_label\">Your Price:</div><div>", ""); // Remove trash
+            priceHTML = priceHTML.replaceAll("</div>", ""); // remove
+            priceHTML = priceHTML.replace(".", ""); // remove dot
+            priceHTML = priceHTML.replace(",", "."); // replace comma with dot
 
-            var regexRule = new RegExp(/^[0-9]+,[0-9]{2} TL$/);
+            var regexRule = new RegExp(/^[0-9]+.[0-9]{2} TL$/);
             if (!regexRule.test(priceHTML)) {
                 continue;
             }
-
-            // Change dec "," to "." 
-            priceHTML = priceHTML.replace(".", "");
-            priceHTML = priceHTML.replace(",", ".");
 
             // Convert price and round accordingly (2 dec)
             var price = parseFloat(priceHTML);
@@ -53,7 +51,6 @@ function changeBalance(conversionRate) {
     document.getElementById("header_wallet_balance").innerHTML = priceInEUR.toFixed(2) + "€ " + "(" + price + " TL)";
 }
 
-
 // All the classNames for the divs that contain prices we want to change
 var classNames = ["game_purchase_price price", "discount_final_price your_price", "discount_final_price",
     "discount_original_price", "game_area_dlc_price"];
@@ -64,13 +61,8 @@ fetch("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/
         return response.json();
     })
     .then(value => {
-
-        
         // Convert balance (at the top)
         changeBalance(value.eur);
         // Convert prices of above defined class names
         changePrice(classNames, value.eur);
     });
-
-
-
