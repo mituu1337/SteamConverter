@@ -5,9 +5,12 @@ function numberWithCommas(x) {
 
 function changePrice(classNames, conversionRate) {
     classNames.forEach(element => {
+
+        console.log(element);
+        
         // get all elements by class name
         var prices = document.getElementsByClassName(element);
-        
+        console.log(prices.length);
         // for every price with this class name
         for (var i = 0; i < prices.length; i++) {
             var priceHTML = prices[i].innerHTML;
@@ -24,7 +27,6 @@ function changePrice(classNames, conversionRate) {
             if (!regexRule.test(priceHTML)) {
                 continue;
             }
-
             // Convert price and round accordingly (2 dec)
             var price = parseFloat(priceHTML);
             var priceInEUR = Math.round(price * conversionRate * 100) / 100;
@@ -48,12 +50,12 @@ function changeBalance(conversionRate) {
     var priceInEUR = Math.round(price * conversionRate * 100) / 100;
 
     // change in document for this item
-    document.getElementById("header_wallet_balance").innerHTML = priceInEUR.toFixed(2) + "€ " + "(" + price + " TL)";
+    document.getElementById("header_wallet_balance").innerHTML = priceInEUR.toFixed(2) + "€ " + "(" + price.toFixed(2) + " TL)";
 }
 
 // All the classNames for the divs that contain prices we want to change
 var classNames = ["game_purchase_price price", "discount_final_price your_price", "discount_final_price",
-    "discount_original_price", "game_area_dlc_price"];
+    "discount_original_price", "game_area_dlc_price", "salepreviewwidgets_StoreSalePriceBox_Wh0L8"];
 
 // API Call and change for every price in doc
 fetch("https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/try/eur.json")
